@@ -9,6 +9,7 @@ list.each do |element|
   if instance
     description_method = instance.method(:description)
     description_content = description_method.call
+    puts "Found description #{description_content}"
   end
   puts "Trying to find instance to call description method #{element.to_s}"
 end
