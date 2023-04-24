@@ -18,6 +18,7 @@ end
 list = Fastlane::Actions.get_all_official_actions
 valid_action_number = 0
 invalid_action_number = 0
+completion_list = []
 list.each do |element|
   action_name = element.to_s
   instance = Fastlane::Actions.action_class_ref(element)
@@ -33,14 +34,15 @@ list.each do |element|
             config_item_to_hash(config_item)
           else
             # puts "ACTION #{action_name} HAS INVALID CONFIG ITEM: #{config_item}"
+            # TODO: fix the invalid config elements
           end
         end
-        json_list = JSON.pretty_generate(hash_list)
-        # puts "Fastlane_Action: #{json_list}"
+        completion_list.append({ 'action_name' => action_name, 'args' => hash_list })
       end
     rescue NameError => e
       invalid_action_number += 1
       puts "Skipping #{instance.to_s} due to an issue with uninitialized constants: #{e.message}"
+      completion_list.append({ 'action_name' => action_name, 'args' => nil })
     end
   else
     invalid_action_number += 1
@@ -53,3 +55,6 @@ puts "VALID INSTANCES: #{valid_action_number}"
 puts "INVALID INSTANCES: #{invalid_action_number}"
 
 
+File.open('./temp.json', 'w') do |f|
+  f.write(JSON.pretty_generate(completion_list))
+end
