@@ -48,7 +48,7 @@ list.each do |element|
               {
                 key: config_item[0],
                 env_name: nil,
-                description: config_item[0],
+                description: config_item[1],
                 default_value: nil,
                 optional: nil,
                 is_string: nil,
