@@ -44,7 +44,17 @@ list.each do |element|
             config_item_to_hash(config_item)
           else
             puts "ACTION #{action_name} HAS INVALID CONFIG ITEM: #{config_item}"
-            { key: config_item[0], description: config_item[1]} if config_item.is_a?(Array) && config_item.length == 2
+            if config_item.is_a?(Array) && config_item.length == 2
+              {
+                key: config_item[0],
+                env_name: nil,
+                description: config_item[0],
+                default_value: nil,
+                optional: nil,
+                is_string: nil,
+                data_type: nil
+              }
+            end
           end
         end
         completion_list.append({ 'action_name' => action_name, 'args' => hash_list })
