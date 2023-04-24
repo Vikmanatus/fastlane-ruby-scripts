@@ -52,3 +52,4 @@ puts "TOTAL ACTIONS: #{list.length}"
 puts "VALID INSTANCES: #{valid_action_number}"
 puts "INVALID INSTANCES: #{invalid_action_number}"
 
+
