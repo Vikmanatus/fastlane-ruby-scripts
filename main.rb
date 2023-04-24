@@ -15,15 +15,21 @@ def config_item_to_hash(config_item)
   }
 end
 
-action_file_paths = Fastlane::Actions.load_default_actions
-file_paths_list = action_file_paths.map do |file_path|
-  action_name = File.basename(file_path, '.rb')
-  { 'action_name' => action_name, 'file_path' => file_path }
+def generate_file_paths_list
+  Fastlane::Actions.load_default_actions.map do |file_path|
+    action_name = File.basename(file_path, '.rb')
+    { 'action_name' => action_name, 'file_path' => file_path }
+  end
 end
 
-File.open('./file_path.json', 'w') do |f|
-  f.write(JSON.pretty_generate(file_paths_list))
+def write_to_json_file(file_path, data)
+  File.open(file_path, 'w') { |f| f.write(JSON.pretty_generate(data)) }
 end
+
+file_paths_list = generate_file_paths_list
+
+write_to_json_file('./file_path.json', file_paths_list)
+
 
 list = Fastlane::Actions.get_all_official_actions
 valid_action_number = 0
@@ -78,9 +84,8 @@ puts "VALID INSTANCES: #{valid_action_number}"
 puts "INVALID INSTANCES: #{invalid_action_number}"
 
 
-File.open('./temp.json', 'w') do |f|
-  f.write(JSON.pretty_generate(completion_list))
-end
+write_to_json_file('./temp.json', completion_list)
+
 # Create a hash to store merged elements
 merged_hash = {}
 
@@ -104,8 +109,6 @@ merged_hash.delete_if { |action_name, _| !completion_list.any? { |el| el["action
 
 # Convert the merged_hash back into an array
 merged_list = merged_hash.values
-File.open('./merged.json', 'w') do |f|
-  f.write(JSON.pretty_generate(merged_list))
-end
 
-# Merging the lists
+write_to_json_file('./merged.json', merged_list)
+
