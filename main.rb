@@ -19,18 +19,18 @@ end
 list = Fastlane::Actions.get_all_official_actions
 list.each do |element|
   instance = Fastlane::Actions.action_class_ref(element)
-  if instance
-    begin
-      options_check = instance.method("available_options")
-      if options_check.call != nil && !options_check.call.empty?
-        hash_list = options_check.call.map { |config_item|
-          config_item.is_a?(FastlaneCore::ConfigItem) ? config_item_to_hash(config_item) : nil
-        }
-        json_list = JSON.pretty_generate(hash_list)
-        puts "#{instance.to_s}: #{json_list}"
+  next unless instance
+
+  begin
+    options_check = instance.method('available_options')
+    if !options_check.call.nil? && !options_check.call.empty?
+      hash_list = options_check.call.map do |config_item|
+        config_item.is_a?(FastlaneCore::ConfigItem) ? config_item_to_hash(config_item) : nil
       end
-    rescue NameError => e
-      puts "Skipping #{instance.to_s} due to an issue with uninitialized constants: #{e.message}"
+      json_list = JSON.pretty_generate(hash_list)
+      puts "#{instance.to_s}: #{json_list}"
     end
+  rescue NameError => e
+    puts "Skipping #{instance.to_s} due to an issue with uninitialized constants: #{e.message}"
   end
 end
