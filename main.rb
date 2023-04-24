@@ -83,9 +83,11 @@ completion_list.each do |element|
   if merged_hash.key?(action_name)
     merged_hash[action_name] = merged_hash[action_name].merge(element)
   else
-    merged_hash[action_name] = element
   end
 end
+
+
+merged_hash.delete_if { |action_name, _| !completion_list.any? { |el| el["action_name"] == action_name } }
 
 # Convert the merged_hash back into an array
 merged_list = merged_hash.values
