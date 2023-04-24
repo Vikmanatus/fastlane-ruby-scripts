@@ -43,12 +43,13 @@ list.each do |element|
           if config_item.is_a?(FastlaneCore::ConfigItem)
             config_item_to_hash(config_item)
           else
-            # TODO: fix the invalid config elements
             puts "ACTION #{action_name} HAS INVALID CONFIG ITEM: #{config_item}"
+            { key: config_item[0], description: config_item[1]} if config_item.is_a?(Array) && config_item.length == 2
           end
         end
         completion_list.append({ 'action_name' => action_name, 'args' => hash_list })
       else
+        puts "INVALID INSTANCE: #{action_name}"
         completion_list.append({ 'action_name' => action_name, 'args' => nil })
       end
     rescue NameError => e
