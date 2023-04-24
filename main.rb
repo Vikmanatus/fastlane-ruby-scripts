@@ -21,27 +21,18 @@ list.each do |element|
   instance = Fastlane::Actions.action_class_ref(element)
   if instance
     options_check = instance.method("available_options")
-    if options_check.call
-      hash_list = options_check.call.map { |config_item| config_item_to_hash(config_item) }
+    if options_check.call != nil && !options_check.call.empty?
+      hash_list = options_check.call.map { |config_item|
+        config_item.is_a?(FastlaneCore::ConfigItem) ? config_item_to_hash(config_item) : nil
+
+      }
       json_list = JSON.pretty_generate(hash_list)
-      puts "args: #{json_list}"
+      puts "#{instance.to_s}: #{json_list}"
 
     end
   end
 end
-# Fastlane::Actions.load_default_actions
-# list = Fastlane::Actions.get_all_official_actions
-# list.each do |element|
-#   action_name = String(element).split('_').map(&:capitalize).join('')
-#   instance = Fastlane::Actions.action_class_ref(action_name)
-#   if instance
-#     description_method = instance.method(:available_options)
-#     if description_method
-#       description_content = description_method.call
-#       puts "Found description #{description_content}"
-#     end
-#   end
-# end
+
 
 
 
