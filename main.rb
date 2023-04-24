@@ -33,7 +33,7 @@ list.each do |element|
   action_name = element.to_s
   instance = Fastlane::Actions.action_class_ref(element)
   if instance
-    puts "INSTANCE #{action_name}"
+    # puts "INSTANCE #{action_name}"
     valid_action_number += 1
     begin
 
@@ -48,6 +48,8 @@ list.each do |element|
           end
         end
         completion_list.append({ 'action_name' => action_name, 'args' => hash_list })
+      else
+        completion_list.append({ 'action_name' => action_name, 'args' => nil })
       end
     rescue NameError => e
       invalid_action_number += 1
